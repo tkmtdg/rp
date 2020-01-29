@@ -80,13 +80,13 @@
       mounted() {
         if (localStorage.rawlist) {
           this.rawlist = localStorage.rawlist;
-          this.remains = this.rawlist.split('\n');
+          this.remains = _.compact(this.rawlist.split('\n'));
         }
       },
       watch: {
         rawlist(rawlist) {
           localStorage.rawlist = rawlist;
-          this.remains = rawlist.split('\n');
+          this.remains = _.compact(rawlist.split('\n'));
         }
       },
       methods: {
@@ -98,7 +98,7 @@
           }
         },
         reset: function () {
-          this.remains = this.rawlist.split('\n');
+          this.remains = _.compact(this.rawlist.split('\n'));
           this.current = '';
           this.picked = [];
         }
