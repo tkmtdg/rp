@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>rp</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
+  <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+</head>
+
+<body>
+  <section class="section">
+
+    <div class="container is-fluid">
+      <div id="app">
+        <article class="panel is-success">
+          <p class="panel-heading">
+            Current
+          </p>
+          <p class="panel-block is-size-1">
+            {{ current }}
+          </p>
+        </article>
+
+        <article class="panel is-info">
+          <p class="panel-heading">
+            Picked
+          </p>
+          <p class="panel-block" v-for="item in picked">
+            {{ item }}
+          </p>
+        </article>
+
+        <article class="panel is-warning">
+          <p class="panel-heading">
+            Remains
+          </p>
+          <p class="panel-block" v-for="item in remains">
+            {{ item }}
+          </p>
+        </article>
+
+        <article class="panel">
+          <p class="panel-heading">
+            Source list
+          </p>
+          <div class="panel-block">
+            <div class="field">
+              <div class="control">
+                <textarea v-model="rawlist" class="textarea"></textarea>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <nav class="navbar is-fixed-bottom">
+          <div class="buttons is-centered">
+            <button v-on:click="reset" class="button is-danger is-rounded">Reset</button>
+            <button v-on:click="pick" class="button is-primary is-rounded is-medium">Pick</button>
+          </div>
+        </nav>
+      </div>
+    </div>
+
+  </section>
+
+  <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.15/lodash.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+  <script>
+    const app = new Vue({
+      el: '#app',
+      data: {
+        rawlist: '',
+        remains: [],
+        picked: [],
+        current: ''
+      },
+      mounted() {
+        if (localStorage.rawlist) {
+          this.rawlist = localStorage.rawlist;
+          this.remains = this.rawlist.split('\n');
+        }
+      },
+      watch: {
+        rawlist(rawlist) {
+          localStorage.rawlist = rawlist;
+        }
+      },
+      methods: {
+        pick: function () {
+          if (this.remains.length > 0) {
+            this.remains = _.shuffle(this.remains);
+            this.current = this.remains.pop();
+            this.picked.push(this.current);
+          }
+        },
+        reset: function () {
+          this.remains = this.rawlist.split('\n');
+          this.current = '';
+          this.picked = [];
+        }
+      }
+    })
+
+  </script>
+</body>
+
+</html>
