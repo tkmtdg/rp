@@ -80,25 +80,30 @@
       mounted() {
         if (localStorage.rawlist) {
           this.rawlist = localStorage.rawlist;
-          this.remains = _.compact(this.rawlist.split('\n'));
+          this.remains = this.makelist();
         }
       },
       watch: {
         rawlist(rawlist) {
           localStorage.rawlist = rawlist;
-          this.remains = _.compact(rawlist.split('\n'));
+          this.remains = this.makelist();
         }
       },
       methods: {
+        makelist: function () {
+          return _.uniq(_.compact(this.rawlist.split('\n')));
+        },
         pick: function () {
           if (this.remains.length > 0) {
             this.remains = _.shuffle(this.remains);
             this.current = this.remains.pop();
             this.picked.push(this.current);
+          } else {
+            alert('nothing to pick');
           }
         },
         reset: function () {
-          this.remains = _.compact(this.rawlist.split('\n'));
+          this.remains = this.makelist();
           this.current = '';
           this.picked = [];
         }
