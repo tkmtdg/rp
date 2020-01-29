@@ -86,6 +86,7 @@
       watch: {
         rawlist(rawlist) {
           localStorage.rawlist = rawlist;
+          this.remains = rawlist.split('\n');
         }
       },
       methods: {
