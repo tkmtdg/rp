@@ -19,15 +19,20 @@
   <section class="section">
 
     <div class="container">
+
+      <h1 class="title">Random Picker</h1>
+
       <div id="app">
         <article class="panel is-success">
           <p class="panel-heading">
             Current
           </p>
-          <p class="panel-block" v-if="_.isEmpty(current)">nothing</p>
-          <p class="panel-block is-size-1" v-else>
-            {{ current }}
-          </p>
+          <div class="panel-block" v-if="_.isEmpty(current)">nothing</div>
+          <div class="panel-block is-size-1" v-else>
+            <div class="is-block has-text-centered" style="width: 100%;">
+              {{ current }}
+            </div>
+          </div>
         </article>
 
         <article class="panel is-info">
@@ -52,7 +57,7 @@
               </div>
             </div>
           </div>
-          <p class="panel-block" v-if="picked.length === 0">nothing</p>
+          <div class="panel-block" v-if="picked.length === 0">nothing</div>
         </article>
 
         <article class="panel is-warning">
@@ -63,6 +68,7 @@
             <a v-on:click="pickat(index)" class="delete" style="margin-right: 10px;"></a>
             {{ item }}
           </div>
+          <div class="panel-block" v-if="remains.length === 0">nothing</div>
         </article>
 
         <article class="panel">
@@ -70,18 +76,22 @@
             Source list
           </p>
           <div class="panel-block">
-            <div class="field">
-              <div class="control">
-                <textarea v-model="rawlist" class="textarea"></textarea>
-              </div>
-            </div>
+            <textarea v-model="rawlist" class="textarea" placeholder="Enter some"></textarea>
           </div>
         </article>
 
-        <nav class="navbar is-fixed-bottom">
-          <div class="buttons is-centered">
-            <button v-on:click="reset" class="button is-danger is-rounded">Reset</button>
-            <button v-on:click="pick" class="button is-primary is-rounded is-medium">Pick</button>
+        <nav class="navbar is-fixed-bottom" style="padding:10px">
+          <div class="level is-mobile">
+            <div class="level-left">
+              <div class="level-item">
+                <button v-on:click="reset" class="button is-danger is-rounded">Reset</button>
+              </div>
+            </div>
+            <div class="level-right">
+              <div class="level-item">
+                <button v-on:click="pick" class="button is-primary is-rounded is-medium">Pick randomly</button>
+              </div>
+            </div>
           </div>
         </nav>
       </div>
@@ -137,9 +147,11 @@
           this.addToPicked(this.current);
         },
         reset: function () {
-          this.remains = this.makelist();
-          this.current = '';
-          this.picked = [];
+          if (confirm('Are you sure you want to reset?')) {
+            this.remains = this.makelist();
+            this.current = '';
+            this.picked = [];
+          }
         }
       }
     })
