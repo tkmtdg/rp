@@ -18,7 +18,7 @@
 <body>
   <section class="section">
 
-    <div class="container is-fluid">
+    <div class="container">
       <div id="app">
         <article class="panel is-success">
           <p class="panel-heading">
@@ -34,9 +34,24 @@
           <p class="panel-heading">
             Picked
           </p>
-          <p class="panel-block" v-for="item in picked">
-            {{ item }}
-          </p>
+          <div class="panel-block is-block" v-for="item in picked">
+            <div class="level is-mobile">
+              <div class="level-left">
+                <div class="level-item">{{ item.value }}</div>
+              </div>
+              <div class="level-right">
+                <div class="level-item is-size-7">
+                  at {{
+                    [
+                      ('00' + item.at.getHours()).slice(-2),
+                      ('00' + item.at.getMinutes()).slice(-2),
+                      ('00' + item.at.getSeconds()).slice(-2)
+                    ].join(':')
+                  }}
+                </div>
+              </div>
+            </div>
+          </div>
           <p class="panel-block" v-if="picked.length === 0">nothing</p>
         </article>
 
@@ -102,18 +117,24 @@
         makelist: function () {
           return _.uniq(_.compact(this.rawlist.split('\n')));
         },
+        addToPicked(current) {
+          this.picked.push({
+            value: this.current,
+            at: new Date()
+          });
+        },
         pick: function () {
           if (this.remains.length > 0) {
             this.remains = _.shuffle(this.remains);
             this.current = this.remains.pop();
-            this.picked.push(this.current);
+            this.addToPicked(this.current);
           } else {
             alert('nothing to pick');
           }
         },
         pickat: function (index) {
           this.current = _.pullAt(this.remains, index)[0];
-          this.picked.push(this.current);
+          this.addToPicked(this.current);
         },
         reset: function () {
           this.remains = this.makelist();
