@@ -11,6 +11,7 @@
     html {
       touch-action: manipulation;
     }
+
   </style>
 </head>
 
@@ -23,7 +24,8 @@
           <p class="panel-heading">
             Current
           </p>
-          <p class="panel-block is-size-1">
+          <p class="panel-block" v-if="_.isEmpty(current)">nothing</p>
+          <p class="panel-block is-size-1" v-else>
             {{ current }}
           </p>
         </article>
@@ -35,15 +37,17 @@
           <p class="panel-block" v-for="item in picked">
             {{ item }}
           </p>
+          <p class="panel-block" v-if="picked.length === 0">nothing</p>
         </article>
 
         <article class="panel is-warning">
           <p class="panel-heading">
             Remains
           </p>
-          <p class="panel-block" v-for="item in remains">
+          <div class="panel-block" v-for="(item, index) in remains">
+            <a v-on:click="pickat(index)" class="delete" style="margin-right: 10px;"></a>
             {{ item }}
-          </p>
+          </div>
         </article>
 
         <article class="panel">
@@ -106,6 +110,10 @@
           } else {
             alert('nothing to pick');
           }
+        },
+        pickat: function (index) {
+          this.current = _.pullAt(this.remains, index)[0];
+          this.picked.push(this.current);
         },
         reset: function () {
           this.remains = this.makelist();
